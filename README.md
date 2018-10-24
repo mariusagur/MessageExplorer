@@ -1,4 +1,4 @@
-# MessageExplorer
+# Message Explorer for XrmToolBox
 My XrmToolBox plugin to view all messages/triggers in Dynamics 365 and the workflows and plugin steps registered for them
 
 Plugin requires that you are connected to an organization.
