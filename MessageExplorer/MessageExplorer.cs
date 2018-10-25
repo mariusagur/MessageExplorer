@@ -18,7 +18,7 @@ namespace MessageExplorer
     {
         private Settings mySettings;
         private MessageHierarchyModel data;
-        private EntityHelper entityHelper;
+        private DataFactory entityHelper;
         private BindingList<string> entityData = new BindingList<string>();
         private BindingList<KeyValuePair<Guid, string>> messageData = new BindingList<KeyValuePair<Guid, string>>();
         private BindingList<string> subscriberData = new BindingList<string>();
@@ -26,7 +26,7 @@ namespace MessageExplorer
         public MessageSubscriber()
         {
             InitializeComponent();
-            entityHelper = new EntityHelper(Service);
+            entityHelper = new DataFactory(Service);
         }
 
         private void MyPluginControl_Load(object sender, EventArgs e)
@@ -42,8 +42,8 @@ namespace MessageExplorer
             {
                 LogInfo("Settings found and loaded");
             }
-            entityHelper = new EntityHelper(Service);
-            data = entityHelper.GetData();
+            entityHelper = new DataFactory(Service);
+            data = entityHelper.Data;
 
             UpdateEntityData();
 

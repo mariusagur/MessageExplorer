@@ -120,7 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityHelper.cs" />
+    <Compile Include="DataFactory.cs" />
     <Compile Include="MessageHierarchyModel.cs" />
     <Compile Include="MessageSubscriberPlugin.cs" />
     <Compile Include="MessageExplorer.cs">

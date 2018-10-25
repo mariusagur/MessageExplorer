@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace MessageExplorer
 {
-    public class EntityHelper
+    public class DataFactory
     {
         #region constants
         private const string SdkMessageFilterLogicalName = "sdkmessagefilter";
@@ -22,32 +22,81 @@ namespace MessageExplorer
         private const string SdkMessageAttribute = "sdkmessageid";
         private const string HiddenAttribute = "ishidden";
         #endregion
+        #region local variables
         private readonly IOrganizationService Service;
+        private MessageHierarchyModel _model = null;
+        #endregion
 
-        public EntityHelper(IOrganizationService service)
+        public DataFactory(IOrganizationService service)
         {
             Service = service;
         }
 
-        public MessageHierarchyModel GetData()
+        public MessageHierarchyModel Data
         {
-            var model = new MessageHierarchyModel();
+            get
+            {
+                if (_model == null)
+                {
+                    GetData();
+                }
+                return _model;
+            }
+        }
+
+        public void RefreshData()
+        {
+            _model = null;
+        }
+
+
+        private void GetData()
+        {
+            _model = new MessageHierarchyModel();
             var workflows = GetWorkflows();
             var messages = GetMessages();
             var plugins = GetPlugins();
 
             var uniqueEntities = messages.Select(e => e.GetAttributeValue<string>(SdkMessageFilterTargetEntityAttribute)).Distinct();
-            model.Entities = uniqueEntities.ToDictionary(m => m, m => false);
+            _model.Entities = uniqueEntities.ToDictionary(m => m, m => false);
+            ProcessMessages(messages);
+            ProcessWorkflows(workflows);
+            ProcessPlugins(plugins, messages);
+        }
+
+        private void ProcessMessages(Entity[] messages)
+        {
             foreach (var message in messages)
             {
                 var entityCode = message.GetAttributeValue<string>(SdkMessageFilterTargetEntityAttribute);
-                if (!model.Messages.ContainsKey(entityCode))
+                if (!_model.Messages.ContainsKey(entityCode))
                 {
-                    model.Messages.Add(entityCode, new List<KeyValuePair<Guid, string>>());
+                    _model.Messages.Add(entityCode, new List<KeyValuePair<Guid, string>>());
                 }
-                model.Messages[entityCode].Add(new KeyValuePair<Guid, string>(message.Id, (string)message.GetAttributeValue<AliasedValue>(MessageNameLinkAttribute).Value));
+                _model.Messages[entityCode].Add(new KeyValuePair<Guid, string>(message.Id, (string)message.GetAttributeValue<AliasedValue>(MessageNameLinkAttribute).Value));
             }
+        }
 
+        private void ProcessPlugins(Entity[] plugins, Entity[] messages)
+        {
+            foreach (var plugin in plugins)
+            {
+                var messageId = plugin.GetAttributeValue<EntityReference>(SdkMessageFilterRelatedEntityAttribute).Id;
+                var message = messages.First(e => e.Id == messageId);
+                var entityName = message.GetAttributeValue<string>(SdkMessageFilterTargetEntityAttribute);
+
+                _model.Entities[entityName] = true;
+
+                if (!_model.Subscribers.ContainsKey(messageId))
+                {
+                    _model.Subscribers.Add(messageId, new List<string>());
+                }
+                _model.Subscribers[messageId].Add($"{plugin.GetAttributeValue<string>("name")} (Plugin)");
+            }
+        }
+
+        private void ProcessWorkflows(Entity[] workflows)
+        {
             foreach (var workflow in workflows)
             {
                 var workflowMessages = new List<string>();
@@ -64,42 +113,26 @@ namespace MessageExplorer
                     workflowMessages.Add("Update");
                 }
                 var primaryEntity = workflow.GetAttributeValue<string>(WorkflowPrimaryEntityAttribute);
-                model.Entities[primaryEntity] = true;
-                var sdkMessages = model.Messages[primaryEntity];
+                _model.Entities[primaryEntity] = true;
+                var sdkMessages = _model.Messages[primaryEntity];
 
                 foreach (var message in workflowMessages)
                 {
                     var sdkMessage = sdkMessages.First(e => e.Value == message);
 
-                    if (!model.Subscribers.ContainsKey(sdkMessage.Key))
+                    if (!_model.Subscribers.ContainsKey(sdkMessage.Key))
                     {
-                        model.Subscribers.Add(sdkMessage.Key, new List<string>());
+                        _model.Subscribers.Add(sdkMessage.Key, new List<string>());
                     }
 
-                    model.Subscribers[sdkMessage.Key].Add($"{workflow.GetAttributeValue<string>("name")} (Workflow)");
+                    _model.Subscribers[sdkMessage.Key].Add($"{workflow.GetAttributeValue<string>("name")} (Workflow)");
                 }
             }
-
-            foreach (var plugin in plugins)
-            {
-                var messageId = plugin.GetAttributeValue<EntityReference>(SdkMessageFilterRelatedEntityAttribute).Id;
-                var message = messages.First(e => e.Id == messageId);
-                var entityName = message.GetAttributeValue<string>(SdkMessageFilterTargetEntityAttribute);
-
-                model.Entities[entityName] = true;
-
-                if (!model.Subscribers.ContainsKey(messageId))
-                {
-                    model.Subscribers.Add(messageId, new List<string>());
-                }
-                model.Subscribers[messageId].Add($"{plugin.GetAttributeValue<string>("name")} (Plugin)");
-            }
-
-            return model;
         }
 
         private Entity[] GetMessages()
         {
+            var entityList = new List<Entity>();
             var qe = new QueryExpression(SdkMessageFilterLogicalName)
             {
                 ColumnSet = new ColumnSet(new[] { SdkMessageFilterTargetEntityAttribute })
@@ -109,11 +142,31 @@ namespace MessageExplorer
                 Columns = new ColumnSet(new[] { "name" }),
                 EntityAlias = "message"
             };
+            //qe.Criteria.AddCondition("iscustomprocessingstepallowed", ConditionOperator.Equal, true);
             qe.LinkEntities.Add(sdkMessageLink);
-
+            qe.PageInfo = new PagingInfo
+            {
+                PageNumber = 1,
+            };
             var results = Service.RetrieveMultiple(qe);
 
-            return results.Entities.ToArray();
+            while (true)
+            {
+                entityList.AddRange(results.Entities);
+
+                if (results.MoreRecords)
+                {
+                    qe.PageInfo.PageNumber++;
+                    qe.PageInfo.PagingCookie = results.PagingCookie;
+
+                    results = Service.RetrieveMultiple(qe);
+                    continue;
+                }
+
+                break;
+            }
+
+            return entityList.ToArray();
         }
 
         private Entity[] GetWorkflows()
