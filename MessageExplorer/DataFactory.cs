@@ -175,10 +175,13 @@ namespace MessageExplorer
             {
                 ColumnSet = new ColumnSet("name", UpdateTriggerAttribute, CreateTriggerAttribute, DeleteTriggerAttribute, WorkflowPrimaryEntityAttribute)
             };
-            qe.Criteria = new FilterExpression(LogicalOperator.Or);
-            qe.Criteria.AddCondition(new ConditionExpression(UpdateTriggerAttribute, ConditionOperator.NotNull));
-            qe.Criteria.AddCondition(new ConditionExpression(CreateTriggerAttribute, ConditionOperator.Equal, true));
-            qe.Criteria.AddCondition(new ConditionExpression(DeleteTriggerAttribute, ConditionOperator.Equal, true));
+            qe.Criteria = new FilterExpression(LogicalOperator.And);
+            qe.Criteria.AddCondition("statecode", ConditionOperator.Equal, 1);
+            var triggerFilter = new FilterExpression(LogicalOperator.Or);
+            triggerFilter.AddCondition(UpdateTriggerAttribute, ConditionOperator.NotNull);
+            triggerFilter.AddCondition(CreateTriggerAttribute, ConditionOperator.Equal, true);
+            triggerFilter.AddCondition(DeleteTriggerAttribute, ConditionOperator.Equal, true);
+            qe.Criteria.AddFilter(triggerFilter);
             var result = Service.RetrieveMultiple(qe);
 
             return result.Entities.ToArray();
