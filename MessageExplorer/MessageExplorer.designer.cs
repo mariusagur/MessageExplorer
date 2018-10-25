@@ -41,6 +41,7 @@
             this.messageCheckBox = new System.Windows.Forms.CheckBox();
             this.toolStripMenu.SuspendLayout();
             this.SuspendLayout();
+            this.ConnectionUpdated += new ConnectionUpdatedHandler(this.MessageExplorer_ConnectionUpdated);
             // 
             // toolStripMenu
             // 
@@ -61,6 +62,7 @@
             this.tsbClose.Name = "tsbClose";
             this.tsbClose.Size = new System.Drawing.Size(86, 22);
             this.tsbClose.Text = "Close this tool";
+            this.tsbClose.Click += new System.EventHandler(this.CloseButton_Click);
             // 
             // tssSeparator1
             // 
@@ -79,7 +81,7 @@
             this.entityListBox.Name = "entityListBox";
             this.entityListBox.Size = new System.Drawing.Size(150, 238);
             this.entityListBox.TabIndex = 5;
-            this.entityListBox.SelectedIndexChanged += new System.EventHandler(this.entityListBox_SelectedIndexChanged);
+            this.entityListBox.SelectedIndexChanged += new System.EventHandler(this.EntityListBox_SelectedIndexChanged);
             // 
             // messageListBox
             // 
@@ -88,7 +90,7 @@
             this.messageListBox.Name = "messageListBox";
             this.messageListBox.Size = new System.Drawing.Size(142, 238);
             this.messageListBox.TabIndex = 7;
-            this.messageListBox.SelectedIndexChanged += new System.EventHandler(this.messageListBox_SelectedIndexChanged);
+            this.messageListBox.SelectedIndexChanged += new System.EventHandler(this.MessageListBox_SelectedIndexChanged);
             // 
             // subscriberListBox
             // 
@@ -125,7 +127,7 @@
             this.entityCheckBox.Size = new System.Drawing.Size(15, 14);
             this.entityCheckBox.TabIndex = 12;
             this.entityCheckBox.UseVisualStyleBackColor = true;
-            this.entityCheckBox.CheckedChanged += new System.EventHandler(this.entityCheckBox_changed);
+            this.entityCheckBox.CheckedChanged += new System.EventHandler(this.EntityCheckBox_Changed);
             // 
             // messageCheckBox
             // 
@@ -135,7 +137,7 @@
             this.messageCheckBox.Size = new System.Drawing.Size(15, 14);
             this.messageCheckBox.TabIndex = 13;
             this.messageCheckBox.UseVisualStyleBackColor = true;
-            this.messageCheckBox.CheckedChanged += new System.EventHandler(this.messageCheckBox_changed);
+            this.messageCheckBox.CheckedChanged += new System.EventHandler(this.MessageCheckBox_Changed);
             // 
             // MessageSubscriber
             // 
@@ -151,7 +153,7 @@
             this.Controls.Add(this.toolStripMenu);
             this.Name = "MessageSubscriber";
             this.Size = new System.Drawing.Size(559, 300);
-            this.Load += new System.EventHandler(this.MyPluginControl_Load);
+            this.Load += new System.EventHandler(this.MessageExplorer_Load);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
             this.ResumeLayout(false);

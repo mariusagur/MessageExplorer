@@ -1,16 +1,11 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Sdk;
-using McTools.Xrm.Connection;
 
 namespace MessageExplorer
 {
@@ -29,7 +24,7 @@ namespace MessageExplorer
             entityHelper = new DataFactory(Service);
         }
 
-        private void MyPluginControl_Load(object sender, EventArgs e)
+        private void MessageExplorer_Load(object sender, EventArgs e)
         {
             // Loads or creates the settings for the plugin
             if (!SettingsManager.Instance.TryLoad(GetType(), out mySettings))
@@ -42,21 +37,31 @@ namespace MessageExplorer
             {
                 LogInfo("Settings found and loaded");
             }
-            entityHelper = new DataFactory(Service);
-            data = entityHelper.Data;
 
-            UpdateEntityData();
+            if (Service != null)
+            {
 
-            entityListBox.DataSource = entityData;
-            messageListBox.DataSource = messageData;
-            messageListBox.ValueMember = "Key";
-            messageListBox.DisplayMember = "Value";
-            subscriberListBox.DataSource = subscriberData;
+                entityHelper = new DataFactory(Service);
+                data = entityHelper.Data;
+
+                UpdateEntityData();
+
+                entityListBox.DataSource = entityData;
+                messageListBox.DataSource = messageData;
+                messageListBox.ValueMember = "Key";
+                messageListBox.DisplayMember = "Value";
+                subscriberListBox.DataSource = subscriberData;
+            }
         }
 
-        private void tsbClose_Click(object sender, EventArgs e)
+        private void CloseButton_Click(object sender, EventArgs e)
         {
             CloseTool();
+        }
+
+        private void MessageExplorer_ConnectionUpdated(object sender, EventArgs e)
+        {
+            MessageExplorer_Load(sender, e);
         }
 
         /// <summary>
@@ -145,22 +150,22 @@ namespace MessageExplorer
             UpdateMessageData();
         }
 
-        private void entityCheckBox_changed(object sender, EventArgs e)
+        private void EntityCheckBox_Changed(object sender, EventArgs e)
         {
             UpdateEntityData();
         }
 
-        private void messageCheckBox_changed(object sender, EventArgs e)
+        private void MessageCheckBox_Changed(object sender, EventArgs e)
         {
             UpdateMessageData();
         }
 
-        private void messageListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void MessageListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateSubscriberData();
         }
 
-        private void entityListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void EntityListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateMessageData();
         }
