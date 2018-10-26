@@ -1,6 +1,6 @@
 ﻿namespace MessageExplorer
 {
-    partial class MessageSubscriber
+    partial class EntityExplorer
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -28,10 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.toolStripMenu = new System.Windows.Forms.ToolStrip();
-            this.tsbClose = new System.Windows.Forms.ToolStripButton();
-            this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbSample = new System.Windows.Forms.ToolStripButton();
+            this.components = new System.ComponentModel.Container();
             this.entityListBox = new System.Windows.Forms.ListBox();
             this.messageListBox = new System.Windows.Forms.ListBox();
             this.subscriberListBox = new System.Windows.Forms.ListBox();
@@ -40,43 +37,19 @@
             this.entityCheckBox = new System.Windows.Forms.CheckBox();
             this.messageCheckBox = new System.Windows.Forms.CheckBox();
             this.MainContainer = new System.Windows.Forms.SplitContainer();
-            this.toolStripMenu.SuspendLayout();
+            this.tsbClose = new System.Windows.Forms.ToolStripButton();
+            this.tssSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.refreshButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripMenu = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
+            this.visualStudioToolStripExtender2 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
             this.MainContainer.Panel2.SuspendLayout();
             this.MainContainer.SuspendLayout();
+            this.toolStripMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // toolStripMenu
-            // 
-            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbClose,
-            this.tssSeparator1,
-            this.tsbSample});
-            this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
-            this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(559, 25);
-            this.toolStripMenu.TabIndex = 4;
-            this.toolStripMenu.Text = "toolStrip1";
-            // 
-            // tsbClose
-            // 
-            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(86, 22);
-            this.tsbClose.Text = "Close this tool";
-            this.tsbClose.Click += new System.EventHandler(this.CloseButton_Click);
-            // 
-            // tssSeparator1
-            // 
-            this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsbSample
-            // 
-            this.tsbSample.Name = "tsbSample";
-            this.tsbSample.Size = new System.Drawing.Size(23, 22);
             // 
             // entityListBox
             // 
@@ -114,7 +87,7 @@
             // entityLabel
             // 
             this.entityLabel.AutoSize = true;
-            this.entityLabel.Location = new System.Drawing.Point(123, 5);
+            this.entityLabel.Location = new System.Drawing.Point(202, 5);
             this.entityLabel.Name = "entityLabel";
             this.entityLabel.Size = new System.Drawing.Size(108, 13);
             this.entityLabel.TabIndex = 9;
@@ -123,7 +96,7 @@
             // messageLabel
             // 
             this.messageLabel.AutoSize = true;
-            this.messageLabel.Location = new System.Drawing.Point(263, 5);
+            this.messageLabel.Location = new System.Drawing.Point(336, 5);
             this.messageLabel.Name = "messageLabel";
             this.messageLabel.Size = new System.Drawing.Size(122, 13);
             this.messageLabel.TabIndex = 10;
@@ -132,7 +105,7 @@
             // entityCheckBox
             // 
             this.entityCheckBox.AutoSize = true;
-            this.entityCheckBox.Location = new System.Drawing.Point(103, 4);
+            this.entityCheckBox.Location = new System.Drawing.Point(185, 5);
             this.entityCheckBox.Name = "entityCheckBox";
             this.entityCheckBox.Size = new System.Drawing.Size(15, 14);
             this.entityCheckBox.TabIndex = 12;
@@ -142,7 +115,7 @@
             // messageCheckBox
             // 
             this.messageCheckBox.AutoSize = true;
-            this.messageCheckBox.Location = new System.Drawing.Point(245, 4);
+            this.messageCheckBox.Location = new System.Drawing.Point(322, 5);
             this.messageCheckBox.Name = "messageCheckBox";
             this.messageCheckBox.Size = new System.Drawing.Size(15, 14);
             this.messageCheckBox.TabIndex = 13;
@@ -170,7 +143,54 @@
             this.MainContainer.SplitterDistance = 166;
             this.MainContainer.TabIndex = 14;
             // 
-            // MessageSubscriber
+            // tsbClose
+            // 
+            this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbClose.Name = "tsbClose";
+            this.tsbClose.Size = new System.Drawing.Size(86, 22);
+            this.tsbClose.Text = "Close this tool";
+            this.tsbClose.Click += new System.EventHandler(this.CloseButton_Click);
+            // 
+            // tssSeparator1
+            // 
+            this.tssSeparator1.Name = "tssSeparator1";
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(76, 22);
+            this.refreshButton.Text = "Refresh data";
+            this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
+            // 
+            // toolStripMenu
+            // 
+            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbClose,
+            this.tssSeparator1,
+            this.refreshButton,
+            this.toolStripSeparator1});
+            this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
+            this.toolStripMenu.Name = "toolStripMenu";
+            this.toolStripMenu.Size = new System.Drawing.Size(559, 25);
+            this.toolStripMenu.TabIndex = 4;
+            this.toolStripMenu.Text = "toolStrip1";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // visualStudioToolStripExtender1
+            // 
+            this.visualStudioToolStripExtender1.DefaultRenderer = null;
+            // 
+            // visualStudioToolStripExtender2
+            // 
+            this.visualStudioToolStripExtender2.DefaultRenderer = null;
+            // 
+            // EntityExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -181,26 +201,22 @@
             this.Controls.Add(this.messageCheckBox);
             this.Controls.Add(this.MainContainer);
             this.Controls.Add(this.toolStripMenu);
-            this.Name = "MessageSubscriber";
+            this.Name = "EntityExplorer";
             this.Size = new System.Drawing.Size(559, 300);
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.MessageExplorer_ConnectionUpdated);
             this.Load += new System.EventHandler(this.MessageExplorer_Load);
-            this.toolStripMenu.ResumeLayout(false);
-            this.toolStripMenu.PerformLayout();
             this.MainContainer.Panel1.ResumeLayout(false);
             this.MainContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).EndInit();
             this.MainContainer.ResumeLayout(false);
+            this.toolStripMenu.ResumeLayout(false);
+            this.toolStripMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.ToolStrip toolStripMenu;
-        private System.Windows.Forms.ToolStripButton tsbClose;
-        private System.Windows.Forms.ToolStripButton tsbSample;
-        private System.Windows.Forms.ToolStripSeparator tssSeparator1;
         private System.Windows.Forms.ListBox entityListBox;
         private System.Windows.Forms.ListBox messageListBox;
         private System.Windows.Forms.ListBox subscriberListBox;
@@ -209,5 +225,12 @@
         private System.Windows.Forms.CheckBox entityCheckBox;
         private System.Windows.Forms.CheckBox messageCheckBox;
         private System.Windows.Forms.SplitContainer MainContainer;
+        private System.Windows.Forms.ToolStripButton tsbClose;
+        private System.Windows.Forms.ToolStripSeparator tssSeparator1;
+        private System.Windows.Forms.ToolStripButton refreshButton;
+        private System.Windows.Forms.ToolStrip toolStripMenu;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender visualStudioToolStripExtender1;
+        private WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender visualStudioToolStripExtender2;
     }
 }

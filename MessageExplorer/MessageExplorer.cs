@@ -8,19 +8,36 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace MessageExplorer
 {
-    public partial class MessageSubscriber : PluginControlBase
+    public partial class EntityExplorer : PluginControlBase, IGitHubPlugin
     {
+        #region Interface variables
+        string IGitHubPlugin.RepositoryName
+        {
+            get
+            {
+                return "MessageExplorer";
+            }
+        }
+        string IGitHubPlugin.UserName
+        {
+            get
+            {
+                return "mariusagur";
+            }
+        }
+        #endregion
+
         private Settings mySettings;
         private MessageHierarchyModel data;
         private DataFactory entityHelper;
         private BindingList<string> entityData = new BindingList<string>();
         private BindingList<MessageModel> messageData = new BindingList<MessageModel>();
         private BindingList<SubscriberModel> subscriberData = new BindingList<SubscriberModel>();
-
-        public MessageSubscriber()
+        public EntityExplorer()
         {
             InitializeComponent();
             entityHelper = new DataFactory(Service);
@@ -42,20 +59,32 @@ namespace MessageExplorer
 
             if (Service != null)
             {
-
-                entityHelper = new DataFactory(Service);
-                data = entityHelper.Data;
-
-                UpdateEntityData();
-
-                entityListBox.DataSource = entityData;
-                messageListBox.DataSource = messageData;
-                messageListBox.ValueMember = "Id";
-                messageListBox.DisplayMember = "MessageName";
-                subscriberListBox.DataSource = subscriberData;
-                subscriberListBox.DisplayMember = "SubscriberName";
-                subscriberListBox.ValueMember = "Id";
+                InstantiateData();
             }
+        }
+
+        private void InstantiateData()
+        {
+            WorkAsync(new WorkAsyncInfo($"Baby shark, doo doo doo doo doo doo",
+                    (eventargs) =>
+                    {
+                        entityHelper = new DataFactory(Service);
+                        data = entityHelper.Data;
+                    })
+            {
+                PostWorkCallBack = (completedargs) =>
+                {
+                    entityListBox.DataSource = entityData;
+                    messageListBox.DataSource = messageData;
+                    messageListBox.ValueMember = "Id";
+                    messageListBox.DisplayMember = "MessageName";
+                    subscriberListBox.DataSource = subscriberData;
+                    subscriberListBox.DisplayMember = "SubscriberName";
+                    subscriberListBox.ValueMember = "Id";
+
+                    UpdateEntityData();
+                }
+            });
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -161,6 +190,11 @@ namespace MessageExplorer
             {
                 MessageBox.Show(JsonConvert.SerializeObject(subscriberListBox.Items[index], Formatting.Indented));
             }
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            InstantiateData();
         }
     }
 }

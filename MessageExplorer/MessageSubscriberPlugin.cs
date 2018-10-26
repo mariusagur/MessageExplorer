@@ -21,7 +21,7 @@ namespace MessageExplorer
     {
         public override IXrmToolBoxPluginControl GetControl()
         {
-            return new MessageSubscriber();
+            return new EntityExplorer();
         }
     }
 }
