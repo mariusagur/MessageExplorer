@@ -1,10 +1,12 @@
 ﻿using McTools.Xrm.Connection;
+using MessageExplorer.Models;
 using Microsoft.Xrm.Sdk;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
 namespace MessageExplorer
@@ -15,8 +17,8 @@ namespace MessageExplorer
         private MessageHierarchyModel data;
         private DataFactory entityHelper;
         private BindingList<string> entityData = new BindingList<string>();
-        private BindingList<KeyValuePair<Guid, string>> messageData = new BindingList<KeyValuePair<Guid, string>>();
-        private BindingList<string> subscriberData = new BindingList<string>();
+        private BindingList<MessageModel> messageData = new BindingList<MessageModel>();
+        private BindingList<SubscriberModel> subscriberData = new BindingList<SubscriberModel>();
 
         public MessageSubscriber()
         {
@@ -48,9 +50,11 @@ namespace MessageExplorer
 
                 entityListBox.DataSource = entityData;
                 messageListBox.DataSource = messageData;
-                messageListBox.ValueMember = "Key";
-                messageListBox.DisplayMember = "Value";
+                messageListBox.ValueMember = "Id";
+                messageListBox.DisplayMember = "MessageName";
                 subscriberListBox.DataSource = subscriberData;
+                subscriberListBox.DisplayMember = "SubscriberName";
+                subscriberListBox.ValueMember = "Id";
             }
         }
 
@@ -94,39 +98,21 @@ namespace MessageExplorer
             subscriberData.Clear();
             if (messageListBox.SelectedItem != null)
             {
-                var message = (KeyValuePair<Guid, string>)messageListBox.SelectedItem;
-                if (data.Subscribers.ContainsKey(message.Key))
+                var subscribers = data.Subscribers.Where(s => s.Message == messageListBox.SelectedItem);
+                foreach (var subscriber in subscribers)
                 {
-                    var subscriber = data.Subscribers[((KeyValuePair<Guid, string>)messageListBox.SelectedItem).Key];
-                    foreach (var sub in subscriber)
-                    {
-                        subscriberData.Add(sub);
-                    }
+                    subscriberData.Add(subscriber);
                 }
             }
         }
 
         private void UpdateMessageData()
         {
-            var entity = (string)entityListBox.SelectedItem;
             messageData.Clear();
-            if (entity != null)
+            var messages = data.Messages.Where(m => (m.Value || messageCheckBox.Checked) && m.Key.Entity == (string)entityListBox.SelectedItem).Select(m => m.Key);
+            foreach (var message in messages)
             {
-                if (messageCheckBox.Checked)
-                {
-                    foreach (var message in data.Messages[entity])
-                    {
-                        messageData.Add(message);
-                    }
-                }
-                else
-                {
-                    var validMessages = data.Messages[entity].Where(msg => data.Subscribers.ContainsKey(msg.Key)).ToList();
-                    foreach (var message in validMessages)
-                    {
-                        messageData.Add(message);
-                    }
-                }
+                messageData.Add(message);
             }
 
             UpdateSubscriberData();
@@ -135,15 +121,13 @@ namespace MessageExplorer
 
         private void UpdateEntityData()
         {
+            entityData.Clear();
             if (data != null)
             {
-                if (entityCheckBox.Checked)
+                var entities = data.Entities.Where(e => e.Value || entityCheckBox.Checked).Select(e => e.Key);
+                foreach (var entity in entities)
                 {
-                    entityData = new BindingList<string>(data.Entities.Where(d => d.Value == false).Select(d => d.Key).ToList());
-                }
-                else
-                {
-                    entityData = new BindingList<string>(data.Entities.Where(d => d.Value == true).Select(d => d.Key).ToList());
+                    entityData.Add(entity);
                 }
             }
 
@@ -168,6 +152,15 @@ namespace MessageExplorer
         private void EntityListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateMessageData();
+        }
+
+        void SubscriberListBox_MouseDoubleClick(object sender, EventArgs e)
+        {
+            int index = subscriberListBox.IndexFromPoint(((MouseEventArgs)e).Location);
+            if (index != ListBox.NoMatches)
+            {
+                MessageBox.Show(JsonConvert.SerializeObject(subscriberListBox.Items[index], Formatting.Indented));
+            }
         }
     }
 }
