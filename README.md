@@ -7,4 +7,4 @@ After load everything should run smoothly, except for being designed by a window
 
 A lot of plans for extending this plugin, please add feature requests as you see fit
 
-<a href="https://www.xrmtoolbox.com/plugins/MessageExplorer/" target="_blank">Try it out yourself!</a>
+[Try it out yourself!](https://www.xrmtoolbox.com/plugins/MessageExplorer/){:target="blank"}
