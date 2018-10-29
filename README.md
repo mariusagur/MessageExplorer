@@ -6,3 +6,5 @@ Upon load all entities, messages/triggers and subscribers are loaded, this makes
 After load everything should run smoothly, except for being designed by a windows forms amateur.
 
 A lot of plans for extending this plugin, please add feature requests as you see fit
+
+[Try it out yourself!](https://www.xrmtoolbox.com/plugins/MessageExplorer/)
