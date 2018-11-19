@@ -172,6 +172,7 @@
             this.EntitySearchBox.Name = "EntitySearchBox";
             this.EntitySearchBox.Size = new System.Drawing.Size(166, 20);
             this.EntitySearchBox.TabIndex = 8;
+            this.EntitySearchBox.TextChanged += new System.EventHandler(this.EntitySearchBox_Search);
             // 
             // MessageSearchPanel
             // 
@@ -193,6 +194,7 @@
             this.MessageSearchBox.Name = "MessageSearchBox";
             this.MessageSearchBox.Size = new System.Drawing.Size(162, 20);
             this.MessageSearchBox.TabIndex = 8;
+            this.MessageSearchBox.TextChanged += new System.EventHandler(this.MessageSearchBox_Search);
             // 
             // tsbClose
             // 

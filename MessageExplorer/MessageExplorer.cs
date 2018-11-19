@@ -3,6 +3,8 @@ using MessageExplorer.Models;
 using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -138,7 +140,25 @@ namespace MessageExplorer
         private void UpdateMessageData()
         {
             messageData.Clear();
-            var messages = data.Messages.Where(m => (m.Value || messageCheckBox.Checked) && m.Key.Entity == (string)EntityListBox.SelectedItem).Select(m => m.Key);
+            IEnumerable<MessageModel> messages;
+            if (string.IsNullOrWhiteSpace(MessageSearchBox.Text))
+            {
+                messages = data.Messages.Where(
+                    m => 
+                        (m.Value || messageCheckBox.Checked) 
+                        && m.Key.Entity == (string)EntityListBox.SelectedItem)
+                    .Select(m => m.Key);
+                
+            }
+            else
+            {
+                messages = data.Messages.Where(
+                    m => 
+                        (m.Value || messageCheckBox.Checked) && 
+                        m.Key.Entity == (string)EntityListBox.SelectedItem && 
+                        m.Key.MessageName.StartsWith(MessageSearchBox.Text, StringComparison.InvariantCultureIgnoreCase))
+                    .Select(m => m.Key);
+            }
             foreach (var message in messages)
             {
                 messageData.Add(message);
@@ -153,7 +173,15 @@ namespace MessageExplorer
             entityData.Clear();
             if (data != null)
             {
-                var entities = data.Entities.Where(e => e.Value || entityCheckBox.Checked).Select(e => e.Key);
+                IEnumerable<string> entities;
+                if (string.IsNullOrWhiteSpace(EntitySearchBox.Text))
+                {
+                    entities = data.Entities.Where(e => e.Value || entityCheckBox.Checked).Select(e => e.Key);
+                }
+                else
+                {
+                    entities = data.Entities.Where(e => (e.Value || entityCheckBox.Checked) && e.Key.StartsWith(EntitySearchBox.Text, StringComparison.InvariantCultureIgnoreCase)).Select(e => e.Key);
+                }
                 foreach (var entity in entities)
                 {
                     entityData.Add(entity);
@@ -179,6 +207,16 @@ namespace MessageExplorer
         }
 
         private void EntityListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateMessageData();
+        }
+
+        private void EntitySearchBox_Search(object sender, EventArgs e)
+        {
+            UpdateEntityData();
+        }
+
+        private void MessageSearchBox_Search(object sender, EventArgs e)
         {
             UpdateMessageData();
         }
