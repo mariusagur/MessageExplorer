@@ -74,13 +74,13 @@ namespace MessageExplorer
             {
                 PostWorkCallBack = (completedargs) =>
                 {
-                    entityListBox.DataSource = entityData;
-                    messageListBox.DataSource = messageData;
-                    messageListBox.ValueMember = "Id";
-                    messageListBox.DisplayMember = "MessageName";
-                    subscriberListBox.DataSource = subscriberData;
-                    subscriberListBox.DisplayMember = "SubscriberName";
-                    subscriberListBox.ValueMember = "Id";
+                    EntityListBox.DataSource = entityData;
+                    MessageListBox.DataSource = messageData;
+                    MessageListBox.ValueMember = "Id";
+                    MessageListBox.DisplayMember = "MessageName";
+                    SubscriberListBox.DataSource = subscriberData;
+                    SubscriberListBox.DisplayMember = "SubscriberName";
+                    SubscriberListBox.ValueMember = "Id";
 
                     UpdateEntityData();
                 }
@@ -125,9 +125,9 @@ namespace MessageExplorer
         private void UpdateSubscriberData()
         {
             subscriberData.Clear();
-            if (messageListBox.SelectedItem != null)
+            if (MessageListBox.SelectedItem != null)
             {
-                var subscribers = data.Subscribers.Where(s => s.Message == messageListBox.SelectedItem);
+                var subscribers = data.Subscribers.Where(s => s.Message == MessageListBox.SelectedItem);
                 foreach (var subscriber in subscribers)
                 {
                     subscriberData.Add(subscriber);
@@ -138,7 +138,7 @@ namespace MessageExplorer
         private void UpdateMessageData()
         {
             messageData.Clear();
-            var messages = data.Messages.Where(m => (m.Value || messageCheckBox.Checked) && m.Key.Entity == (string)entityListBox.SelectedItem).Select(m => m.Key);
+            var messages = data.Messages.Where(m => (m.Value || messageCheckBox.Checked) && m.Key.Entity == (string)EntityListBox.SelectedItem).Select(m => m.Key);
             foreach (var message in messages)
             {
                 messageData.Add(message);
@@ -185,10 +185,10 @@ namespace MessageExplorer
 
         void SubscriberListBox_MouseDoubleClick(object sender, EventArgs e)
         {
-            int index = subscriberListBox.IndexFromPoint(((MouseEventArgs)e).Location);
+            int index = SubscriberListBox.IndexFromPoint(((MouseEventArgs)e).Location);
             if (index != ListBox.NoMatches)
             {
-                MessageBox.Show(JsonConvert.SerializeObject(subscriberListBox.Items[index], Formatting.Indented));
+                MessageBox.Show(JsonConvert.SerializeObject(SubscriberListBox.Items[index], Formatting.Indented));
             }
         }
 
