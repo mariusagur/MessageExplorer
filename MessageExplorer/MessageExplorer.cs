@@ -3,7 +3,6 @@ using MessageExplorer.Models;
 using Microsoft.Xrm.Sdk;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,23 +13,12 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MessageExplorer
 {
-    public partial class EntityExplorer : PluginControlBase, IGitHubPlugin
+    public partial class EntityExplorer : PluginControlBase, IGitHubPlugin, IHelpPlugin
     {
         #region Interface variables
-        string IGitHubPlugin.RepositoryName
-        {
-            get
-            {
-                return "MessageExplorer";
-            }
-        }
-        string IGitHubPlugin.UserName
-        {
-            get
-            {
-                return "mariusagur";
-            }
-        }
+        string IGitHubPlugin.RepositoryName => "MessageExplorer";
+        string IGitHubPlugin.UserName => "mariusagur";
+        public string HelpUrl => "https://github.com/mariusagur/MessageExplorer/wiki";
         #endregion
 
         private Settings mySettings;
@@ -144,18 +132,18 @@ namespace MessageExplorer
             if (string.IsNullOrWhiteSpace(MessageSearchBox.Text))
             {
                 messages = data.Messages.Where(
-                    m => 
-                        (m.Value || messageCheckBox.Checked) 
+                    m =>
+                        (m.Value || messageCheckBox.Checked)
                         && m.Key.Entity == (string)EntityListBox.SelectedItem)
                     .Select(m => m.Key);
-                
+
             }
             else
             {
                 messages = data.Messages.Where(
-                    m => 
-                        (m.Value || messageCheckBox.Checked) && 
-                        m.Key.Entity == (string)EntityListBox.SelectedItem && 
+                    m =>
+                        (m.Value || messageCheckBox.Checked) &&
+                        m.Key.Entity == (string)EntityListBox.SelectedItem &&
                         m.Key.MessageName.StartsWith(MessageSearchBox.Text, StringComparison.InvariantCultureIgnoreCase))
                     .Select(m => m.Key);
             }
@@ -180,7 +168,11 @@ namespace MessageExplorer
                 }
                 else
                 {
-                    entities = data.Entities.Where(e => (e.Value || entityCheckBox.Checked) && e.Key.StartsWith(EntitySearchBox.Text, StringComparison.InvariantCultureIgnoreCase)).Select(e => e.Key);
+                    entities = data.Entities.Where(
+                        e =>
+                            (e.Value || entityCheckBox.Checked) &&
+                            e.Key.IndexOf(EntitySearchBox.Text, 0, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        .Select(e => e.Key);
                 }
                 foreach (var entity in entities)
                 {

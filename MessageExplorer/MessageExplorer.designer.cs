@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntityExplorer));
             this.EntityListBox = new System.Windows.Forms.ListBox();
             this.MessageListBox = new System.Windows.Forms.ListBox();
             this.SubscriberListBox = new System.Windows.Forms.ListBox();
@@ -62,10 +63,11 @@
             // 
             this.EntityListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EntityListBox.FormattingEnabled = true;
-            this.EntityListBox.Location = new System.Drawing.Point(0, 21);
+            this.EntityListBox.ItemHeight = 16;
+            this.EntityListBox.Location = new System.Drawing.Point(0, 26);
+            this.EntityListBox.Margin = new System.Windows.Forms.Padding(4);
             this.EntityListBox.Name = "EntityListBox";
-            this.EntityListBox.Size = new System.Drawing.Size(166, 583);
-            this.EntityListBox.Sorted = true;
+            this.EntityListBox.Size = new System.Drawing.Size(221, 491);
             this.EntityListBox.TabIndex = 5;
             this.EntityListBox.SelectedIndexChanged += new System.EventHandler(this.EntityListBox_SelectedIndexChanged);
             // 
@@ -73,9 +75,11 @@
             // 
             this.MessageListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MessageListBox.FormattingEnabled = true;
-            this.MessageListBox.Location = new System.Drawing.Point(0, 21);
+            this.MessageListBox.ItemHeight = 16;
+            this.MessageListBox.Location = new System.Drawing.Point(0, 26);
+            this.MessageListBox.Margin = new System.Windows.Forms.Padding(4);
             this.MessageListBox.Name = "MessageListBox";
-            this.MessageListBox.Size = new System.Drawing.Size(163, 583);
+            this.MessageListBox.Size = new System.Drawing.Size(218, 491);
             this.MessageListBox.Sorted = true;
             this.MessageListBox.TabIndex = 7;
             this.MessageListBox.SelectedIndexChanged += new System.EventHandler(this.MessageListBox_SelectedIndexChanged);
@@ -84,37 +88,43 @@
             // 
             this.SubscriberListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SubscriberListBox.FormattingEnabled = true;
-            this.SubscriberListBox.Location = new System.Drawing.Point(333, 25);
+            this.SubscriberListBox.ItemHeight = 16;
+            this.SubscriberListBox.Location = new System.Drawing.Point(444, 27);
+            this.SubscriberListBox.Margin = new System.Windows.Forms.Padding(4);
             this.SubscriberListBox.Name = "SubscriberListBox";
-            this.SubscriberListBox.Size = new System.Drawing.Size(637, 604);
+            this.SubscriberListBox.Size = new System.Drawing.Size(299, 517);
             this.SubscriberListBox.Sorted = true;
             this.SubscriberListBox.TabIndex = 8;
+            this.doubleClickToolTip.SetToolTip(this.SubscriberListBox, "Double click to show more information");
             this.SubscriberListBox.DoubleClick += new System.EventHandler(this.SubscriberListBox_MouseDoubleClick);
             // 
             // entityLabel
             // 
             this.entityLabel.AutoSize = true;
-            this.entityLabel.Location = new System.Drawing.Point(202, 5);
+            this.entityLabel.Location = new System.Drawing.Point(269, 6);
+            this.entityLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.entityLabel.Name = "entityLabel";
-            this.entityLabel.Size = new System.Drawing.Size(108, 13);
+            this.entityLabel.Size = new System.Drawing.Size(142, 17);
             this.entityLabel.TabIndex = 9;
             this.entityLabel.Text = "Show unused entities";
             // 
             // messageLabel
             // 
             this.messageLabel.AutoSize = true;
-            this.messageLabel.Location = new System.Drawing.Point(336, 5);
+            this.messageLabel.Location = new System.Drawing.Point(448, 6);
+            this.messageLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.messageLabel.Name = "messageLabel";
-            this.messageLabel.Size = new System.Drawing.Size(122, 13);
+            this.messageLabel.Size = new System.Drawing.Size(161, 17);
             this.messageLabel.TabIndex = 10;
             this.messageLabel.Text = "Show unused messages";
             // 
             // entityCheckBox
             // 
             this.entityCheckBox.AutoSize = true;
-            this.entityCheckBox.Location = new System.Drawing.Point(185, 5);
+            this.entityCheckBox.Location = new System.Drawing.Point(247, 6);
+            this.entityCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.entityCheckBox.Name = "entityCheckBox";
-            this.entityCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.entityCheckBox.Size = new System.Drawing.Size(18, 17);
             this.entityCheckBox.TabIndex = 12;
             this.entityCheckBox.UseVisualStyleBackColor = true;
             this.entityCheckBox.CheckedChanged += new System.EventHandler(this.EntityCheckBox_Changed);
@@ -122,9 +132,10 @@
             // messageCheckBox
             // 
             this.messageCheckBox.AutoSize = true;
-            this.messageCheckBox.Location = new System.Drawing.Point(322, 5);
+            this.messageCheckBox.Location = new System.Drawing.Point(429, 6);
+            this.messageCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.messageCheckBox.Name = "messageCheckBox";
-            this.messageCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.messageCheckBox.Size = new System.Drawing.Size(18, 17);
             this.messageCheckBox.TabIndex = 13;
             this.messageCheckBox.UseVisualStyleBackColor = true;
             this.messageCheckBox.CheckedChanged += new System.EventHandler(this.MessageCheckBox_Changed);
@@ -132,9 +143,10 @@
             // MainContainer
             // 
             this.MainContainer.Dock = System.Windows.Forms.DockStyle.Left;
-            this.MainContainer.Location = new System.Drawing.Point(0, 25);
-            this.MainContainer.MaximumSize = new System.Drawing.Size(333, 0);
-            this.MainContainer.MinimumSize = new System.Drawing.Size(200, 0);
+            this.MainContainer.Location = new System.Drawing.Point(0, 27);
+            this.MainContainer.Margin = new System.Windows.Forms.Padding(4);
+            this.MainContainer.MaximumSize = new System.Drawing.Size(444, 0);
+            this.MainContainer.MinimumSize = new System.Drawing.Size(267, 0);
             this.MainContainer.Name = "MainContainer";
             // 
             // MainContainer.Panel1
@@ -148,8 +160,9 @@
             this.MainContainer.Panel2.AllowDrop = true;
             this.MainContainer.Panel2.Controls.Add(this.MessageListBox);
             this.MainContainer.Panel2.Controls.Add(this.MessageSearchPanel);
-            this.MainContainer.Size = new System.Drawing.Size(333, 604);
-            this.MainContainer.SplitterDistance = 166;
+            this.MainContainer.Size = new System.Drawing.Size(444, 517);
+            this.MainContainer.SplitterDistance = 221;
+            this.MainContainer.SplitterWidth = 5;
             this.MainContainer.TabIndex = 14;
             // 
             // EntitySearchPanel
@@ -159,9 +172,10 @@
             this.EntitySearchPanel.Controls.Add(this.EntitySearchBox);
             this.EntitySearchPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.EntitySearchPanel.Location = new System.Drawing.Point(0, 0);
-            this.EntitySearchPanel.MaximumSize = new System.Drawing.Size(0, 21);
+            this.EntitySearchPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.EntitySearchPanel.MaximumSize = new System.Drawing.Size(0, 26);
             this.EntitySearchPanel.Name = "EntitySearchPanel";
-            this.EntitySearchPanel.Size = new System.Drawing.Size(166, 21);
+            this.EntitySearchPanel.Size = new System.Drawing.Size(221, 26);
             this.EntitySearchPanel.TabIndex = 9;
             // 
             // EntitySearchBox
@@ -169,8 +183,9 @@
             this.EntitySearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.EntitySearchBox.Location = new System.Drawing.Point(0, 0);
+            this.EntitySearchBox.Margin = new System.Windows.Forms.Padding(4);
             this.EntitySearchBox.Name = "EntitySearchBox";
-            this.EntitySearchBox.Size = new System.Drawing.Size(166, 20);
+            this.EntitySearchBox.Size = new System.Drawing.Size(1104, 22);
             this.EntitySearchBox.TabIndex = 8;
             this.EntitySearchBox.TextChanged += new System.EventHandler(this.EntitySearchBox_Search);
             // 
@@ -181,9 +196,10 @@
             this.MessageSearchPanel.Controls.Add(this.MessageSearchBox);
             this.MessageSearchPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.MessageSearchPanel.Location = new System.Drawing.Point(0, 0);
-            this.MessageSearchPanel.MaximumSize = new System.Drawing.Size(0, 21);
+            this.MessageSearchPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.MessageSearchPanel.MaximumSize = new System.Drawing.Size(0, 26);
             this.MessageSearchPanel.Name = "MessageSearchPanel";
-            this.MessageSearchPanel.Size = new System.Drawing.Size(163, 21);
+            this.MessageSearchPanel.Size = new System.Drawing.Size(218, 26);
             this.MessageSearchPanel.TabIndex = 9;
             // 
             // MessageSearchBox
@@ -191,8 +207,9 @@
             this.MessageSearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MessageSearchBox.Location = new System.Drawing.Point(0, 0);
+            this.MessageSearchBox.Margin = new System.Windows.Forms.Padding(4);
             this.MessageSearchBox.Name = "MessageSearchBox";
-            this.MessageSearchBox.Size = new System.Drawing.Size(162, 20);
+            this.MessageSearchBox.Size = new System.Drawing.Size(1087, 22);
             this.MessageSearchBox.TabIndex = 8;
             this.MessageSearchBox.TextChanged += new System.EventHandler(this.MessageSearchBox_Search);
             // 
@@ -200,19 +217,19 @@
             // 
             this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(86, 22);
+            this.tsbClose.Size = new System.Drawing.Size(107, 24);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.CloseButton_Click);
             // 
             // tssSeparator1
             // 
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // refreshButton
             // 
             this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(76, 22);
+            this.refreshButton.Size = new System.Drawing.Size(96, 24);
             this.refreshButton.Text = "Refresh data";
             this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
@@ -226,14 +243,14 @@
             this.toolStripSeparator1});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(970, 25);
+            this.toolStripMenu.Size = new System.Drawing.Size(743, 27);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // visualStudioToolStripExtender1
             // 
@@ -245,11 +262,11 @@
             // 
             // doubleClickToolTip
             // 
-            this.doubleClickToolTip.ToolTipTitle = "Double click for more information";
+            this.doubleClickToolTip.ToolTipTitle = "Show more";
             // 
             // EntityExplorer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.entityCheckBox);
             this.Controls.Add(this.SubscriberListBox);
@@ -258,8 +275,11 @@
             this.Controls.Add(this.messageCheckBox);
             this.Controls.Add(this.MainContainer);
             this.Controls.Add(this.toolStripMenu);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "EntityExplorer";
-            this.Size = new System.Drawing.Size(970, 629);
+            this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
+            this.Size = new System.Drawing.Size(743, 544);
+            this.TabIcon = ((System.Drawing.Image)(resources.GetObject("$this.TabIcon")));
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.MessageExplorer_ConnectionUpdated);
             this.Load += new System.EventHandler(this.MessageExplorer_Load);
             this.MainContainer.Panel1.ResumeLayout(false);

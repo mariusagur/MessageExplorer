@@ -46,7 +46,7 @@ namespace MessageExplorer
             var plugins = GetPlugins();
 
             var uniqueEntities = messages.Select(e => e.GetAttributeValue<string>(SdkMessageFilterTargetEntityAttribute)).Distinct();
-            _model.Entities = uniqueEntities.ToDictionary(m => m, m => false);
+            _model.Entities = uniqueEntities.OrderBy(m => m).ToDictionary(m => m, m => false);
             foreach (var message in messages)
             {
                 _model.Messages.Add(EntityMapper.MapMessageModelFromEntity(message), false);
