@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -225,6 +226,12 @@ namespace MessageExplorer
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             InstantiateData();
+        }
+
+        private void ExportButton_Click(object sender, EventArgs e)
+        {
+            var exportForm = new ExportSubscribers(subscriberData.ToList());
+            exportForm.ShowDialog();
         }
     }
 }

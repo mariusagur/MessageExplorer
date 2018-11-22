@@ -50,6 +50,8 @@
             this.visualStudioToolStripExtender1 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.visualStudioToolStripExtender2 = new WeifenLuo.WinFormsUI.Docking.VisualStudioToolStripExtender(this.components);
             this.doubleClickToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.SubscriberButtonsPanel = new System.Windows.Forms.Panel();
+            this.ExportButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MainContainer)).BeginInit();
             this.MainContainer.Panel1.SuspendLayout();
             this.MainContainer.Panel2.SuspendLayout();
@@ -57,6 +59,7 @@
             this.EntitySearchPanel.SuspendLayout();
             this.MessageSearchPanel.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
+            this.SubscriberButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // EntityListBox
@@ -89,10 +92,10 @@
             this.SubscriberListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SubscriberListBox.FormattingEnabled = true;
             this.SubscriberListBox.ItemHeight = 16;
-            this.SubscriberListBox.Location = new System.Drawing.Point(444, 27);
+            this.SubscriberListBox.Location = new System.Drawing.Point(444, 53);
             this.SubscriberListBox.Margin = new System.Windows.Forms.Padding(4);
             this.SubscriberListBox.Name = "SubscriberListBox";
-            this.SubscriberListBox.Size = new System.Drawing.Size(299, 517);
+            this.SubscriberListBox.Size = new System.Drawing.Size(299, 491);
             this.SubscriberListBox.Sorted = true;
             this.SubscriberListBox.TabIndex = 8;
             this.doubleClickToolTip.SetToolTip(this.SubscriberListBox, "Double click to show more information");
@@ -185,7 +188,7 @@
             this.EntitySearchBox.Location = new System.Drawing.Point(0, 0);
             this.EntitySearchBox.Margin = new System.Windows.Forms.Padding(4);
             this.EntitySearchBox.Name = "EntitySearchBox";
-            this.EntitySearchBox.Size = new System.Drawing.Size(1104, 22);
+            this.EntitySearchBox.Size = new System.Drawing.Size(442, 22);
             this.EntitySearchBox.TabIndex = 8;
             this.EntitySearchBox.TextChanged += new System.EventHandler(this.EntitySearchBox_Search);
             // 
@@ -209,7 +212,7 @@
             this.MessageSearchBox.Location = new System.Drawing.Point(0, 0);
             this.MessageSearchBox.Margin = new System.Windows.Forms.Padding(4);
             this.MessageSearchBox.Name = "MessageSearchBox";
-            this.MessageSearchBox.Size = new System.Drawing.Size(1087, 22);
+            this.MessageSearchBox.Size = new System.Drawing.Size(436, 22);
             this.MessageSearchBox.TabIndex = 8;
             this.MessageSearchBox.TextChanged += new System.EventHandler(this.MessageSearchBox_Search);
             // 
@@ -264,12 +267,35 @@
             // 
             this.doubleClickToolTip.ToolTipTitle = "Show more";
             // 
+            // SubscriberButtonsPanel
+            // 
+            this.SubscriberButtonsPanel.AllowDrop = true;
+            this.SubscriberButtonsPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SubscriberButtonsPanel.Controls.Add(this.ExportButton);
+            this.SubscriberButtonsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.SubscriberButtonsPanel.Location = new System.Drawing.Point(444, 27);
+            this.SubscriberButtonsPanel.Name = "SubscriberButtonsPanel";
+            this.SubscriberButtonsPanel.Size = new System.Drawing.Size(299, 26);
+            this.SubscriberButtonsPanel.TabIndex = 15;
+            // 
+            // ExportButton
+            // 
+            this.ExportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ExportButton.Location = new System.Drawing.Point(221, 0);
+            this.ExportButton.Name = "ExportButton";
+            this.ExportButton.Size = new System.Drawing.Size(75, 23);
+            this.ExportButton.TabIndex = 0;
+            this.ExportButton.Text = "Export";
+            this.ExportButton.UseVisualStyleBackColor = true;
+            this.ExportButton.Click += new System.EventHandler(this.ExportButton_Click);
+            // 
             // EntityExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.entityCheckBox);
             this.Controls.Add(this.SubscriberListBox);
+            this.Controls.Add(this.SubscriberButtonsPanel);
+            this.Controls.Add(this.entityCheckBox);
             this.Controls.Add(this.messageLabel);
             this.Controls.Add(this.entityLabel);
             this.Controls.Add(this.messageCheckBox);
@@ -292,6 +318,7 @@
             this.MessageSearchPanel.PerformLayout();
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
+            this.SubscriberButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -318,5 +345,7 @@
         private System.Windows.Forms.TextBox EntitySearchBox;
         private System.Windows.Forms.Panel MessageSearchPanel;
         private System.Windows.Forms.Panel EntitySearchPanel;
+        private System.Windows.Forms.Panel SubscriberButtonsPanel;
+        private System.Windows.Forms.Button ExportButton;
     }
 }

@@ -120,9 +120,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportSubscribers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportSubscribers.Designer.cs">
+      <DependentUpon>ExportSubscribers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DataFactory.cs" />
     <Compile Include="Helpers\EntityMapper.cs" />
+    <Compile Include="Helpers\ExportFormatter.cs" />
     <Compile Include="Models\MessageHierarchyModel.cs" />
     <Compile Include="MessageSubscriberPlugin.cs" />
     <Compile Include="MessageExplorer.cs">
@@ -146,6 +153,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ExportSubscribers.resx">
+      <DependentUpon>ExportSubscribers.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MessageExplorer.resx">
       <DependentUpon>MessageExplorer.cs</DependentUpon>
     </EmbeddedResource>
