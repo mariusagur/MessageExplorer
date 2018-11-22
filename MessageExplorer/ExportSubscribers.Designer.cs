@@ -43,6 +43,8 @@
             this.SubscriberIdCheckBox = new System.Windows.Forms.CheckBox();
             this.EntityCheckBox = new System.Windows.Forms.CheckBox();
             this.ExportDataTextArea = new System.Windows.Forms.RichTextBox();
+            this.JsonCsvToggle = new System.Windows.Forms.CheckBox();
+            this.CsvHeadersCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -52,12 +54,15 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.CsvHeadersCheckBox);
+            this.splitContainer1.Panel1.Controls.Add(this.JsonCsvToggle);
             this.splitContainer1.Panel1.Controls.Add(this.MessageCheckBox);
             this.splitContainer1.Panel1.Controls.Add(this.MessageLabel);
             this.splitContainer1.Panel1.Controls.Add(this.SubscriberLabel);
@@ -85,7 +90,7 @@
             this.MessageCheckBox.AutoSize = true;
             this.MessageCheckBox.Checked = true;
             this.MessageCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.MessageCheckBox.Location = new System.Drawing.Point(17, 32);
+            this.MessageCheckBox.Location = new System.Drawing.Point(17, 24);
             this.MessageCheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.MessageCheckBox.Name = "MessageCheckBox";
             this.MessageCheckBox.Size = new System.Drawing.Size(112, 17);
@@ -245,7 +250,7 @@
             this.EntityCheckBox.AutoSize = true;
             this.EntityCheckBox.Checked = true;
             this.EntityCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.EntityCheckBox.Location = new System.Drawing.Point(17, 14);
+            this.EntityCheckBox.Location = new System.Drawing.Point(17, 6);
             this.EntityCheckBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.EntityCheckBox.Name = "EntityCheckBox";
             this.EntityCheckBox.Size = new System.Drawing.Size(97, 17);
@@ -262,9 +267,37 @@
             this.ExportDataTextArea.Location = new System.Drawing.Point(2, 3);
             this.ExportDataTextArea.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.ExportDataTextArea.Name = "ExportDataTextArea";
-            this.ExportDataTextArea.Size = new System.Drawing.Size(438, 336);
+            this.ExportDataTextArea.Size = new System.Drawing.Size(439, 336);
             this.ExportDataTextArea.TabIndex = 1;
             this.ExportDataTextArea.Text = "";
+            // 
+            // JsonCsvToggle
+            // 
+            this.JsonCsvToggle.Appearance = System.Windows.Forms.Appearance.Button;
+            this.JsonCsvToggle.AutoSize = true;
+            this.JsonCsvToggle.Checked = true;
+            this.JsonCsvToggle.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.JsonCsvToggle.Location = new System.Drawing.Point(17, 330);
+            this.JsonCsvToggle.Name = "JsonCsvToggle";
+            this.JsonCsvToggle.Size = new System.Drawing.Size(45, 23);
+            this.JsonCsvToggle.TabIndex = 13;
+            this.JsonCsvToggle.Text = "JSON";
+            this.JsonCsvToggle.UseVisualStyleBackColor = true;
+            this.JsonCsvToggle.CheckedChanged += new System.EventHandler(this.JsonCsvToggle_CheckedChanged);
+            // 
+            // CsvHeadersCheckBox
+            // 
+            this.CsvHeadersCheckBox.AutoSize = true;
+            this.CsvHeadersCheckBox.Checked = true;
+            this.CsvHeadersCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CsvHeadersCheckBox.Location = new System.Drawing.Point(17, 42);
+            this.CsvHeadersCheckBox.Name = "CsvHeadersCheckBox";
+            this.CsvHeadersCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.CsvHeadersCheckBox.TabIndex = 14;
+            this.CsvHeadersCheckBox.Text = "Include headers";
+            this.CsvHeadersCheckBox.UseVisualStyleBackColor = true;
+            this.CsvHeadersCheckBox.Visible = false;
+            this.CsvHeadersCheckBox.CheckedChanged += new System.EventHandler(this.CsvHeadersCheckBox_CheckedChanged);
             // 
             // ExportSubscribers
             // 
@@ -301,5 +334,7 @@
         private System.Windows.Forms.Label SubscriberLabel;
         private System.Windows.Forms.CheckBox MessageCheckBox;
         private System.Windows.Forms.RichTextBox ExportDataTextArea;
+        private System.Windows.Forms.CheckBox JsonCsvToggle;
+        private System.Windows.Forms.CheckBox CsvHeadersCheckBox;
     }
 }

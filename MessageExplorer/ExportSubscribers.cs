@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace MessageExplorer
@@ -67,21 +68,90 @@ namespace MessageExplorer
 
         private void BuildOutput()
         {
-            if (EntityCheckBox.Checked && MessageCheckBox.Checked)
+            if (JsonCsvToggle.Checked)
             {
-                ExportDataTextArea.Text = JsonConvert.SerializeObject(entitiesAndMessages, Formatting.Indented);
-            }
-            else if (EntityCheckBox.Checked)
-            {
-                ExportDataTextArea.Text = JsonConvert.SerializeObject(entitiesAndSubscribers, Formatting.Indented);
-            }
-            else if (MessageCheckBox.Checked)
-            {
-                ExportDataTextArea.Text = JsonConvert.SerializeObject(messages.Values, Formatting.Indented);
+                if (EntityCheckBox.Checked && MessageCheckBox.Checked)
+                {
+                    ExportDataTextArea.Text = JsonConvert.SerializeObject(entitiesAndMessages, Formatting.Indented);
+                }
+                else if (EntityCheckBox.Checked)
+                {
+                    ExportDataTextArea.Text = JsonConvert.SerializeObject(entitiesAndSubscribers, Formatting.Indented);
+                }
+                else if (MessageCheckBox.Checked)
+                {
+                    ExportDataTextArea.Text = JsonConvert.SerializeObject(messages.Values, Formatting.Indented);
+                }
+                else
+                {
+                    ExportDataTextArea.Text = JsonConvert.SerializeObject(subscribers.Values, Formatting.Indented);
+                }
             }
             else
             {
-                ExportDataTextArea.Text = JsonConvert.SerializeObject(subscribers.Values, Formatting.Indented);
+                var data = string.Empty;
+                if (CsvHeadersCheckBox.Checked)
+                {
+                    if (SubscriberIdCheckBox.Checked)
+                    {
+                        data += ($"{SubscriberIdCheckBox.Text};");
+                    }
+                    if (SubscriberNameCheckBox.Checked)
+                    {
+                        data += ($"{SubscriberNameCheckBox.Text};");
+                    }
+                    if (SubscriberTypeCheckBox.Checked)
+                    {
+                        data += ($"{SubscriberTypeCheckBox.Text};");
+                    }
+                    if (SubscriberAttributeFilterCheckBox.Checked)
+                    {
+                        data += ($"{SubscriberAttributeFilterCheckBox.Text};");
+                    }
+                    if (SubscriberEntityCheckBox.Checked)
+                    {
+                        data += ($"{SubscriberEntityCheckBox.Text};");
+                    }
+                    if (SubscriberMessageCheckBox.Checked)
+                    {
+                        data += ($"{SubscriberMessageCheckBox.Text}");
+                    }
+
+                    data.TrimEnd(';');
+                    data += Environment.NewLine;
+                }
+
+                foreach (var s in subscribers.Values)
+                {
+                    if (s.ContainsKey(SubscriberIdCheckBox.Text))
+                    {
+                        data += $"{s[SubscriberIdCheckBox.Text]};";
+                    }
+                    if (s.ContainsKey(SubscriberNameCheckBox.Text))
+                    {
+                        data += $"{s[SubscriberNameCheckBox.Text]};";
+                    }
+                    if (s.ContainsKey(SubscriberTypeCheckBox.Text))
+                    {
+                        data += $"{s[SubscriberTypeCheckBox.Text]};";
+                    }
+                    if (s.ContainsKey(SubscriberAttributeFilterCheckBox.Text))
+                    {
+                        data += $"{s[SubscriberAttributeFilterCheckBox.Text]};";
+                    }
+                    if (s.ContainsKey(SubscriberEntityCheckBox.Text))
+                    {
+                        data += $"{s[SubscriberEntityCheckBox.Text]};";
+                    }
+                    if (s.ContainsKey(SubscriberMessageCheckBox.Text))
+                    {
+                        data += $"{s[SubscriberMessageCheckBox.Text]}";
+                    }
+                    data.TrimEnd(';');
+                    data += Environment.NewLine;
+                }
+
+                ExportDataTextArea.Text = data;
             }
         }
 
@@ -267,6 +337,26 @@ namespace MessageExplorer
         }
 
         private void MessageCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            BuildOutput();
+        }
+
+        private void JsonCsvToggle_CheckedChanged(object sender, EventArgs e)
+        {
+            EntityCheckBox.Visible = JsonCsvToggle.Checked;
+            MessageCheckBox.Visible = JsonCsvToggle.Checked;
+            MessageNameCheckBox.Visible = JsonCsvToggle.Checked;
+            MessageIdCheckBox.Visible = JsonCsvToggle.Checked;
+            MessageEntityCheckBox.Visible = JsonCsvToggle.Checked;
+            CsvHeadersCheckBox.Visible = !JsonCsvToggle.Checked;
+            MessageLabel.Visible = JsonCsvToggle.Checked;
+
+            JsonCsvToggle.Text = JsonCsvToggle.Checked ? "JSON" : "CSV";
+
+            BuildOutput();
+        }
+
+        private void CsvHeadersCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             BuildOutput();
         }
