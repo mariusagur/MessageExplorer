@@ -15,6 +15,8 @@ namespace MessageExplorer
         private Dictionary<string, List<object>> entitiesAndSubscribers = new Dictionary<string, List<object>>();
         private Dictionary<Guid, Dictionary<string, object>> messages = new Dictionary<Guid, Dictionary<string, object>>();
         private Dictionary<Guid, Dictionary<string, object>> subscribers = new Dictionary<Guid, Dictionary<string, object>>();
+        private string separator = "\t";
+        private string attributeSeparator = ";";
 
         public ExportSubscribers(List<SubscriberModel> subscribers)
         {
@@ -68,7 +70,7 @@ namespace MessageExplorer
 
         private void BuildOutput()
         {
-            if (JsonCsvToggle.Checked)
+            if (!JsonToggle.Enabled)
             {
                 if (EntityCheckBox.Checked && MessageCheckBox.Checked)
                 {
@@ -94,23 +96,23 @@ namespace MessageExplorer
                 {
                     if (SubscriberIdCheckBox.Checked)
                     {
-                        data += ($"{SubscriberIdCheckBox.Text};");
+                        data += ($"{SubscriberIdCheckBox.Text}{separator}");
                     }
                     if (SubscriberNameCheckBox.Checked)
                     {
-                        data += ($"{SubscriberNameCheckBox.Text};");
+                        data += ($"{SubscriberNameCheckBox.Text}{separator}");
                     }
                     if (SubscriberTypeCheckBox.Checked)
                     {
-                        data += ($"{SubscriberTypeCheckBox.Text};");
+                        data += ($"{SubscriberTypeCheckBox.Text}{separator}");
                     }
                     if (SubscriberAttributeFilterCheckBox.Checked)
                     {
-                        data += ($"{SubscriberAttributeFilterCheckBox.Text};");
+                        data += ($"{SubscriberAttributeFilterCheckBox.Text}{separator}");
                     }
                     if (SubscriberEntityCheckBox.Checked)
                     {
-                        data += ($"{SubscriberEntityCheckBox.Text};");
+                        data += ($"{SubscriberEntityCheckBox.Text}{separator}");
                     }
                     if (SubscriberMessageCheckBox.Checked)
                     {
@@ -125,23 +127,24 @@ namespace MessageExplorer
                 {
                     if (s.ContainsKey(SubscriberIdCheckBox.Text))
                     {
-                        data += $"{s[SubscriberIdCheckBox.Text]};";
+                        data += $"{s[SubscriberIdCheckBox.Text]}{separator}";
                     }
                     if (s.ContainsKey(SubscriberNameCheckBox.Text))
                     {
-                        data += $"{s[SubscriberNameCheckBox.Text]};";
+                        data += $"{s[SubscriberNameCheckBox.Text]}{separator}";
                     }
                     if (s.ContainsKey(SubscriberTypeCheckBox.Text))
                     {
-                        data += $"{s[SubscriberTypeCheckBox.Text]};";
+                        data += $"{s[SubscriberTypeCheckBox.Text]}{separator}";
                     }
-                    if (s.ContainsKey(SubscriberAttributeFilterCheckBox.Text))
+                    if (s.ContainsKey(SubscriberAttributeFilterCheckBox.Text) && s[SubscriberAttributeFilterCheckBox.Text] != null)
                     {
-                        data += $"{s[SubscriberAttributeFilterCheckBox.Text]};";
+                        var attributes = new List<string>((List<string>)s[SubscriberAttributeFilterCheckBox.Text]);
+                        data += $"{string.Join(attributeSeparator, attributes)}{separator}";
                     }
                     if (s.ContainsKey(SubscriberEntityCheckBox.Text))
                     {
-                        data += $"{s[SubscriberEntityCheckBox.Text]};";
+                        data += $"{s[SubscriberEntityCheckBox.Text]}{separator}";
                     }
                     if (s.ContainsKey(SubscriberMessageCheckBox.Text))
                     {
@@ -343,21 +346,66 @@ namespace MessageExplorer
 
         private void JsonCsvToggle_CheckedChanged(object sender, EventArgs e)
         {
-            EntityCheckBox.Visible = JsonCsvToggle.Checked;
-            MessageCheckBox.Visible = JsonCsvToggle.Checked;
-            MessageNameCheckBox.Visible = JsonCsvToggle.Checked;
-            MessageIdCheckBox.Visible = JsonCsvToggle.Checked;
-            MessageEntityCheckBox.Visible = JsonCsvToggle.Checked;
-            CsvHeadersCheckBox.Visible = !JsonCsvToggle.Checked;
-            MessageLabel.Visible = JsonCsvToggle.Checked;
+            var isJson = sender == JsonToggle;
+            if (isJson)
+            {
+                JsonToggle.BackColor = System.Drawing.Color.Lime;
+                CsvToggle.BackColor = System.Drawing.SystemColors.Control;
+            }
+            else
+            {
+                JsonToggle.BackColor = System.Drawing.SystemColors.Control;
+                CsvToggle.BackColor = System.Drawing.Color.Lime;
+            }
 
-            JsonCsvToggle.Text = JsonCsvToggle.Checked ? "JSON" : "CSV";
+            JsonToggle.Enabled = !isJson;
+            JsonMessagePanel.Visible = isJson;
+            CsvToggle.Enabled = isJson;
+            SeparatorPanel.Visible = !isJson;
+
+            EntityCheckBox.Visible = isJson;
+            MessageCheckBox.Visible = isJson;
+            CsvHeadersCheckBox.Visible = !isJson;
+            //MessageNameCheckBox.Visible = isJson;
+            //MessageIdCheckBox.Visible = isJson;
+            //MessageEntityCheckBox.Visible = isJson;
+            //MessageLabel.Visible = isJson;
 
             BuildOutput();
         }
 
         private void CsvHeadersCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            BuildOutput();
+        }
+
+        private void SeparatorChange(object sender, EventArgs e)
+        {
+            if (!((RadioButton)sender).Checked)
+            {
+                return;
+            }
+            if (sender == TabSepButton)
+            {
+                separator = "\t";
+                attributeSeparator = ",";
+            }
+            if (sender == SemiColonSepButton)
+            {
+                separator = ";";
+                attributeSeparator = ",";
+            }
+            if (sender == ColonSepButton)
+            {
+                separator = ":";
+                attributeSeparator = ",";
+            }
+            if (sender == CommaSepButton)
+            {
+                separator = ",";
+                attributeSeparator = ";";
+            }
+
             BuildOutput();
         }
     }
