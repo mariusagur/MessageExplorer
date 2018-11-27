@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -66,16 +65,40 @@ namespace MessageExplorer
                 PostWorkCallBack = (completedargs) =>
                 {
                     EntityListBox.DataSource = entityData;
-                    MessageListBox.DataSource = messageData;
-                    MessageListBox.ValueMember = "Id";
-                    MessageListBox.DisplayMember = "MessageName";
+                    MessageView.DataSource = messageData;
                     SubscriberListBox.DataSource = subscriberData;
                     SubscriberListBox.DisplayMember = "SubscriberName";
                     SubscriberListBox.ValueMember = "Id";
 
+                    UpdateMessageColumns();
+
                     UpdateEntityData();
                 }
             });
+        }
+
+        private void UpdateMessageColumns()
+        {
+            if (!MessageView.Columns.Contains("IncludeMessage"))
+            {
+                MessageView.Columns.Add(this.includeMessageCheckBoxColumn);
+            }
+            if (MessageView.Columns.Contains("Id"))
+            {
+                MessageView.Columns["Id"].ReadOnly = true;
+                MessageView.Columns["Id"].DisplayIndex = 1;
+            }
+            if (MessageView.Columns.Contains("MessageName"))
+            {
+                MessageView.Columns["MessageName"].ReadOnly = true;
+                MessageView.Columns["MessageName"].HeaderText = "Name";
+                MessageView.Columns["MessageName"].DisplayIndex = 2;
+            }
+            if (MessageView.Columns.Contains("Entity"))
+            {
+                MessageView.Columns["Entity"].ReadOnly = true;
+                MessageView.Columns["Entity"].DisplayIndex = 3;
+            }
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
@@ -113,49 +136,26 @@ namespace MessageExplorer
             }
         }
 
-        private void UpdateSubscriberData()
+        private void AddSubscribers(Guid messageId)
         {
-            subscriberData.Clear();
-            if (MessageListBox.SelectedItem != null)
+            var subscribers = data.Subscribers.Where(s => s.Message.Id == messageId);
+            foreach (var subscriber in subscribers)
             {
-                var subscribers = data.Subscribers.Where(s => s.Message == MessageListBox.SelectedItem);
-                foreach (var subscriber in subscribers)
+                subscriberData.Add(subscriber);
+            }
+        }
+
+        private void RemoveSubscribers(Guid messageId)
+        {
+            var subsToRemove = subscriberData.Where(s => s.Message.Id == messageId).ToList();
+            foreach (var s in subsToRemove)
+            {
+                if (s.Message.Id == messageId)
                 {
-                    subscriberData.Add(subscriber);
+                    subscriberData.Remove(s);
                 }
             }
         }
-
-        private void UpdateMessageData()
-        {
-            messageData.Clear();
-            IEnumerable<MessageModel> messages;
-            if (string.IsNullOrWhiteSpace(MessageSearchBox.Text))
-            {
-                messages = data.Messages.Where(
-                    m =>
-                        (m.Value || messageCheckBox.Checked)
-                        && m.Key.Entity == (string)EntityListBox.SelectedItem)
-                    .Select(m => m.Key);
-
-            }
-            else
-            {
-                messages = data.Messages.Where(
-                    m =>
-                        (m.Value || messageCheckBox.Checked) &&
-                        m.Key.Entity == (string)EntityListBox.SelectedItem &&
-                        m.Key.MessageName.StartsWith(MessageSearchBox.Text, StringComparison.InvariantCultureIgnoreCase))
-                    .Select(m => m.Key);
-            }
-            foreach (var message in messages)
-            {
-                messageData.Add(message);
-            }
-
-            UpdateSubscriberData();
-        }
-
 
         private void UpdateEntityData()
         {
@@ -180,8 +180,30 @@ namespace MessageExplorer
                     entityData.Add(entity);
                 }
             }
+        }
 
-            UpdateMessageData();
+        private void AddMessage(string entity)
+        {
+            subscriberData.Clear();
+            var messages = data.Messages.Where(
+                m =>
+                    (m.Value || messageCheckBox.Checked)
+                    && m.Key.Entity == entity)
+                .Select(m => m.Key);
+
+            foreach (var m in messages)
+            {
+                messageData.Add(m);
+            }
+        }
+        private void RemoveMessage(string entity)
+        {
+            var messagesToRemove = messageData.Where(m => m.Entity == entity).ToList();
+            foreach (var m in messagesToRemove)
+            {
+                RemoveSubscribers(m.Id);
+                messageData.Remove(m);
+            }
         }
 
         private void EntityCheckBox_Changed(object sender, EventArgs e)
@@ -191,27 +213,44 @@ namespace MessageExplorer
 
         private void MessageCheckBox_Changed(object sender, EventArgs e)
         {
-            UpdateMessageData();
+            messageData.Clear();
+            foreach (var m in EntityListBox.CheckedItems)
+            {
+                AddMessage((string)m);
+            }
         }
 
-        private void MessageListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void MessageListBox_SelectedIndexChanged(object sender, ItemCheckEventArgs e)
         {
-            UpdateSubscriberData();
+            var checkedMessage = ((CheckedListBox)sender).Items[e.Index] as MessageModel;
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                AddSubscribers(checkedMessage.Id);
+            }
+            else
+            {
+                RemoveSubscribers(checkedMessage.Id);
+            }
         }
 
-        private void EntityListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void EntityListBox_SelectedIndexChanged(object sender, ItemCheckEventArgs e)
         {
-            UpdateMessageData();
+            var checkedEntity = ((CheckedListBox)sender).Items[e.Index] as string;
+
+            if (e.NewValue == CheckState.Checked)
+            {
+                AddMessage(checkedEntity);
+            }
+            else
+            {
+                RemoveMessage(checkedEntity);
+            }
         }
 
         private void EntitySearchBox_Search(object sender, EventArgs e)
         {
             UpdateEntityData();
-        }
-
-        private void MessageSearchBox_Search(object sender, EventArgs e)
-        {
-            UpdateMessageData();
         }
 
         void SubscriberListBox_MouseDoubleClick(object sender, EventArgs e)
@@ -232,6 +271,19 @@ namespace MessageExplorer
         {
             var exportForm = new ExportSubscribers(subscriberData.ToList());
             exportForm.ShowDialog();
+        }
+
+        private void MessageView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (((DataGridView)sender).CurrentCell.GetType() == typeof(DataGridViewCheckBoxCell))
+            {
+                MessageView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void MessageView_IncludeChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            Console.WriteLine("I am saved");
         }
     }
 }

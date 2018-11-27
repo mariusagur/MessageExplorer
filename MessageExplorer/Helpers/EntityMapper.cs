@@ -10,12 +10,14 @@ namespace MessageExplorer.Helpers
     {
         public static MessageModel MapMessageModelFromEntity(Entity message)
         {
-            return new MessageModel
+            var model = new MessageModel
             {
                 Entity = message.GetAttributeValue<string>(SdkMessageFilterTargetEntityAttribute),
-                Id = message.Id,
-                MessageName = (string)message.GetAttributeValue<AliasedValue>(MessageNameLinkAttribute).Value
+                Id = message.Id
             };
+            model.MessageName = (string)message.GetAttributeValue<AliasedValue>(MessageNameLinkAttribute).Value + $" ({model.Entity})";
+
+            return model;
         }
 
         public static List<SubscriberModel> MapSubscriberFromWorkflow(Entity workflow, List<MessageModel> messages)
@@ -38,7 +40,7 @@ namespace MessageExplorer.Helpers
 
             foreach (var message in workflowMessages)
             {
-                var sdkMessage = messages.First(e => e.MessageName == message && e.Entity == primaryEntity);
+                var sdkMessage = messages.First(e => e.MessageName == $"{message} ({workflow.GetAttributeValue<string>(WorkflowPrimaryEntityAttribute)})" && e.Entity == primaryEntity);
                 var subscriber = new SubscriberModel
                 {
                     Entity = primaryEntity,
