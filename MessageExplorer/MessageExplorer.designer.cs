@@ -83,6 +83,7 @@
             this.MessageView.TabIndex = 7;
             this.MessageView.CellContentClick += MessageView_CellClick;
             this.MessageView.CellValueChanged += MessageView_IncludeChanged;
+            this.MessageView.Columns.Add(includeMessageCheckBoxColumn);
             // 
             // SubscriberListBox
             // 
@@ -122,7 +123,7 @@
             this.entityCheckBox.Size = new System.Drawing.Size(15, 14);
             this.entityCheckBox.TabIndex = 12;
             this.entityCheckBox.UseVisualStyleBackColor = true;
-            this.entityCheckBox.CheckedChanged += new System.EventHandler(this.EntityCheckBox_Changed);
+            this.entityCheckBox.CheckedChanged += new System.EventHandler(UpdateEntityData);
             // 
             // messageCheckBox
             // 
@@ -166,7 +167,7 @@
             this.EntitySearchBox.Name = "EntitySearchBox";
             this.EntitySearchBox.Size = new System.Drawing.Size(200, 20);
             this.EntitySearchBox.TabIndex = 8;
-            this.EntitySearchBox.TextChanged += new System.EventHandler(this.EntitySearchBox_Search);
+            this.EntitySearchBox.TextChanged += new System.EventHandler(UpdateEntityData);
             //
             // 
             //

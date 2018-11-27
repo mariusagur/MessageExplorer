@@ -21,5 +21,9 @@ namespace MessageExplorer.Helpers
         public const string SdkMessageAttribute = "sdkmessageid";
         public const string HiddenAttribute = "ishidden";
         public const string AttributeFilter = "filteringattributes";
+        public const string MessageNameProperty = "MessageName";
+        public const string MessageEntityProperty = "Entity";
+        public const string IdProperty = "Id";
+        public const string SubscriberNameProperty = "SubscriberName";
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using static MessageExplorer.Helpers.Constants;
 
 namespace MessageExplorer
 {
@@ -30,7 +31,6 @@ namespace MessageExplorer
         public EntityExplorer()
         {
             InitializeComponent();
-            entityHelper = new DataFactory(Service);
         }
 
         private void MessageExplorer_Load(object sender, EventArgs e)
@@ -67,8 +67,8 @@ namespace MessageExplorer
                     EntityListBox.DataSource = entityData;
                     MessageView.DataSource = messageData;
                     SubscriberListBox.DataSource = subscriberData;
-                    SubscriberListBox.DisplayMember = "SubscriberName";
-                    SubscriberListBox.ValueMember = "Id";
+                    SubscriberListBox.DisplayMember = SubscriberNameProperty;
+                    SubscriberListBox.ValueMember = IdProperty;
 
                     UpdateMessageColumns();
 
@@ -79,25 +79,21 @@ namespace MessageExplorer
 
         private void UpdateMessageColumns()
         {
-            if (!MessageView.Columns.Contains("IncludeMessage"))
+            if (MessageView.Columns.Contains(IdProperty))
             {
-                MessageView.Columns.Add(this.includeMessageCheckBoxColumn);
+                MessageView.Columns[IdProperty].ReadOnly = true;
+                MessageView.Columns[IdProperty].DisplayIndex = 1;
             }
-            if (MessageView.Columns.Contains("Id"))
+            if (MessageView.Columns.Contains(MessageNameProperty))
             {
-                MessageView.Columns["Id"].ReadOnly = true;
-                MessageView.Columns["Id"].DisplayIndex = 1;
+                MessageView.Columns[MessageNameProperty].ReadOnly = true;
+                MessageView.Columns[MessageNameProperty].HeaderText = "Name";
+                MessageView.Columns[MessageNameProperty].DisplayIndex = 2;
             }
-            if (MessageView.Columns.Contains("MessageName"))
+            if (MessageView.Columns.Contains(MessageEntityProperty))
             {
-                MessageView.Columns["MessageName"].ReadOnly = true;
-                MessageView.Columns["MessageName"].HeaderText = "Name";
-                MessageView.Columns["MessageName"].DisplayIndex = 2;
-            }
-            if (MessageView.Columns.Contains("Entity"))
-            {
-                MessageView.Columns["Entity"].ReadOnly = true;
-                MessageView.Columns["Entity"].DisplayIndex = 3;
+                MessageView.Columns[MessageEntityProperty].ReadOnly = true;
+                MessageView.Columns[MessageEntityProperty].DisplayIndex = 3;
             }
         }
 
@@ -184,7 +180,6 @@ namespace MessageExplorer
 
         private void AddMessage(string entity)
         {
-            subscriberData.Clear();
             var messages = data.Messages.Where(
                 m =>
                     (m.Value || messageCheckBox.Checked)
@@ -206,7 +201,7 @@ namespace MessageExplorer
             }
         }
 
-        private void EntityCheckBox_Changed(object sender, EventArgs e)
+        private void UpdateEntityData(object sender, EventArgs e)
         {
             UpdateEntityData();
         }
@@ -217,20 +212,6 @@ namespace MessageExplorer
             foreach (var m in EntityListBox.CheckedItems)
             {
                 AddMessage((string)m);
-            }
-        }
-
-        private void MessageListBox_SelectedIndexChanged(object sender, ItemCheckEventArgs e)
-        {
-            var checkedMessage = ((CheckedListBox)sender).Items[e.Index] as MessageModel;
-
-            if (e.NewValue == CheckState.Checked)
-            {
-                AddSubscribers(checkedMessage.Id);
-            }
-            else
-            {
-                RemoveSubscribers(checkedMessage.Id);
             }
         }
 
@@ -246,11 +227,6 @@ namespace MessageExplorer
             {
                 RemoveMessage(checkedEntity);
             }
-        }
-
-        private void EntitySearchBox_Search(object sender, EventArgs e)
-        {
-            UpdateEntityData();
         }
 
         void SubscriberListBox_MouseDoubleClick(object sender, EventArgs e)
@@ -283,7 +259,19 @@ namespace MessageExplorer
 
         private void MessageView_IncludeChanged(object sender, DataGridViewCellEventArgs e)
         {
-            Console.WriteLine("I am saved");
+            var currentRow = ((DataGridView)sender).CurrentRow;
+            if (currentRow != null)
+            {
+                var messageId = (Guid)currentRow.Cells["Id"].Value;
+                if ((int)currentRow.Cells[e.ColumnIndex].Value == 1)
+                {
+                    AddSubscribers(messageId);
+                }
+                else
+                {
+                    RemoveSubscribers(messageId);
+                }
+            }
         }
     }
 }
